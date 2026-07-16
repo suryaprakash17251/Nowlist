@@ -3,9 +3,26 @@ const authRoutes = require('./routes/authRoutes');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const http = require('http');
+const { Server } = require('socket.io');
+const initSocket = require('./socket/socketHandler');
 require('dotenv').config();
 
 const app = express();
+const server = http.createServer(app);
+
+// Socket.io setup
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
+});
+
+initSocket(io);
+
+// Make io accessible inside routes/controllers
+app.set('io', io);
 
 // Middleware
 app.use(cors());
@@ -31,7 +48,7 @@ mongoose
   .connect(MONGO_URI)
   .then(() => {
     console.log('MongoDB Connected Successfully');
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
   })

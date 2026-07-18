@@ -2,14 +2,17 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './components/Login';
 import Register from './components/Register';
+import TodoList from './components/TodoList';
 
 const Home = () => {
   const { user, logout } = useAuth();
   return (
-    <div style={{ maxWidth: 500, margin: '80px auto', fontFamily: 'sans-serif' }}>
-      <h2>Welcome, {user?.name}</h2>
-      <button onClick={logout}>Log out</button>
-      <p>Todo list UI comes next (Day 6).</p>
+    <div>
+      <div style={{ maxWidth: 600, margin: '20px auto', display: 'flex', justifyContent: 'space-between', fontFamily: 'sans-serif' }}>
+        <h3>Welcome, {user?.name}</h3>
+        <button onClick={logout}>Log out</button>
+      </div>
+      <TodoList />
     </div>
   );
 };
